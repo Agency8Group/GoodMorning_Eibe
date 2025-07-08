@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <title>GoodMorning Eibe - RSS 이슈 대시보드</title>
+        <style>
+            body {
+                font-family: "Segoe UI", sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                margin: 0;
+                padding: 20px;
+                min-height: 100vh;
+            }
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                background: #fff;
+                border-radius: 16px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+                padding: 32px;
+            }
+            h1 {
+                color: #2d6cdf;
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            .loading {
+                text-align: center;
+                color: #666;
+                font-size: 18px;
+                padding: 40px;
+            }
+            .news-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+                margin-top: 30px;
+            }
+            .news-item {
+                border: 1px solid #eee;
+                border-radius: 12px;
+                padding: 20px;
+                transition: transform 0.2s, box-shadow 0.2s;
+                background: #fafafa;
+            }
+            .news-item:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            }
+            .news-title {
+                font-size: 16px;
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 10px;
+                line-height: 1.4;
+            }
+            .news-title a {
+                text-decoration: none;
+                color: inherit;
+            }
+            .news-title a:hover {
+                color: #2d6cdf;
+            }
+            .news-date {
+                color: #888;
+                font-size: 12px;
+                margin-bottom: 8px;
+            }
+            .news-image {
+                width: 100%;
+                height: 150px;
+                object-fit: cover;
+                border-radius: 8px;
+                margin-bottom: 10px;
+                background: #f0f0f0;
+                transition: opacity 0.3s ease;
+            }
+            .news-item.no-image .news-title {
+                font-size: 18px;
+                margin-top: 10px;
+            }
+            .error {
+                color: #e74c3c;
+                text-align: center;
+                padding: 20px;
+            }
+            .refresh-btn {
+                background: #2d6cdf;
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+                margin: 20px auto;
+                display: block;
+                transition: background 0.2s;
+            }
+            .refresh-btn:hover {
+                background: #1e5bb8;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>GoodMorning Eibe<br />RSS 이슈 대시보드</h1>
+
+            <button class="refresh-btn" onclick="loadNews()">새로고침</button>
+
+            <div id="news-container">
+                <div class="loading">뉴스를 불러오는 중...</div>
+            </div>
+        </div>
+
+        <script>
+            // RSS 피드 URL들 (더 안정적인 피드들로 변경)
+            const RSS_FEEDS = [
+                {
+                    name: "네이버 뉴스",
+                    url: "https://api.rss2json.com/v1/api.json?rss_url=https://news.naver.com/rss/main",
+                    fallback: "https://news.naver.com/",
+                },
+                {
+                    name: "다음 뉴스",
+                    url: "https://api.rss2json.com/v1/api.json?rss_url=https://news.daum.net/rss",
+                    fallback: "https://news.daum.net/",
+                },
+                {
+                    name: "연합뉴스",
+                    url: "https://api.rss2json.com/v1/api.json?rss_url=https://www.yonhapnewstv.co.kr/category/news/headline/feed/",
+                    fallback: "https://www.yonhapnewstv.co.kr/",
+                },
+            ];
+
+            // 뉴스 로딩 함수
+            async function loadNews() {
+                const container = document.getElementById("news-container");
+                container.innerHTML =
+                    '<div class="loading">뉴스를 불러오는 중...</div>';
+
+                let allNews = [];
+
+                try {
+                    // 각 RSS 피드에서 뉴스 가져오기
+                    for (const feed of RSS_FEEDS) {
+                        try {
+                            const response = await fetch(feed.url);
+                            const data = await response.json();
+
+                            if (data.status === "ok" && data.items) {
+                                // 각 기사에 소스 정보 추가
+                                const newsWithSource = data.items
+                                    .slice(0, 5)
+                                    .map((item) => ({
+                                        ...item,
+                                        source: feed.name,
+                                        fallback: feed.fallback,
+                                    }));
+                                allNews = allNews.concat(newsWithSource);
+                            }
+                        } catch (error) {
+                            console.error(`Error loading ${feed.name}:`, error);
+                        }
+                    }
+
+                    // 날짜순으로 정렬 (최신순)
+                    allNews.sort(
+                        (a, b) => new Date(b.pubDate) - new Date(a.pubDate)
+                    );
+
+                    // 뉴스 표시
+                    displayNews(allNews);
+                } catch (error) {
+                    console.error("Error loading news:", error);
+                    container.innerHTML = `
+          <div class="error">
+            뉴스를 불러오는데 실패했습니다.<br>
+            <a href="#" onclick="loadNews()">다시 시도</a> 또는 
+            <a href="goodmorning_eibe.html">링크 모음 버전</a>을 이용해주세요.
+          </div>
+        `;
+                }
+            }
+
+            // 뉴스 표시 함수
+            function displayNews(news) {
+                const container = document.getElementById("news-container");
+
+                if (news.length === 0) {
+                    container.innerHTML = `
+          <div class="error">
+            뉴스를 불러올 수 없습니다.<br>
+            <a href="goodmorning_eibe.html">링크 모음 버전</a>을 이용해주세요.
+          </div>
+        `;
+                    return;
+                }
+
+                const newsHTML = news
+                    .map((item) => {
+                        const date = new Date(item.pubDate).toLocaleDateString(
+                            "ko-KR",
+                            {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                            }
+                        );
+
+                        // 이미지 URL 추출 개선
+                        let image = "";
+                        if (item.thumbnail) {
+                            image = item.thumbnail;
+                        } else if (item.enclosure && item.enclosure.link) {
+                            image = item.enclosure.link;
+                        } else if (item.content) {
+                            // content에서 이미지 태그 추출
+                            const imgMatch = item.content.match(
+                                /<img[^>]+src="([^"]+)"/
+                            );
+                            if (imgMatch) {
+                                image = imgMatch[1];
+                            }
+                        }
+
+                        // 이미지가 없으면 이미지 없이 표시
+                        const hasImage = image && image !== "";
+                        const cardClass = hasImage
+                            ? "news-item"
+                            : "news-item no-image";
+
+                        const imageHTML = hasImage
+                            ? `<img src="${image}" alt="뉴스 이미지" class="news-image" onerror="this.style.display='none'">`
+                            : "";
+
+                        return `
+          <div class="${cardClass}">
+            ${imageHTML}
+            <div class="news-title">
+              <a href="${item.link}" target="_blank">${item.title}</a>
+            </div>
+            <div class="news-date">${date} | ${item.source}</div>
+          </div>
+        `;
+                    })
+                    .join("");
+
+                container.innerHTML = `
+        <div class="news-grid">
+          ${newsHTML}
+        </div>
+      `;
+            }
+
+            // 페이지 로드 시 뉴스 로딩
+            window.onload = loadNews;
+        </script>
+    </body>
+</html>
