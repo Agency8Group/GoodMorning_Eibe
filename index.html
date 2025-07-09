@@ -29,6 +29,83 @@
                 border: 1px solid rgba(0, 0, 0, 0.05);
             }
 
+            .header-section {
+                text-align: center;
+                margin-bottom: 40px;
+                padding: 20px 0;
+            }
+
+            .title-card {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-radius: 20px;
+                padding: 40px 60px;
+                position: relative;
+                box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .title-card h1 {
+                background: none;
+                -webkit-background-clip: unset;
+                -webkit-text-fill-color: unset;
+                background-clip: unset;
+                color: white;
+                margin-bottom: 12px;
+                font-size: 3rem;
+                font-weight: 800;
+                line-height: 1.1;
+                animation: none;
+                letter-spacing: -0.02em;
+            }
+
+            .title-card .subtitle {
+                background: none;
+                -webkit-background-clip: unset;
+                -webkit-text-fill-color: unset;
+                background-clip: unset;
+                color: rgba(255, 255, 255, 0.9);
+                font-size: 1.2rem;
+                margin-bottom: 0;
+                font-weight: 500;
+                animation: none;
+                opacity: 1;
+            }
+
+            .title-refresh-btn {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                width: 48px;
+                height: 48px;
+                border: none;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+            }
+
+            .title-refresh-btn:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: scale(1.1);
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            }
+
+            .title-refresh-btn svg {
+                width: 20px;
+                height: 20px;
+                fill: white;
+                transition: transform 0.3s ease;
+            }
+
+            .title-refresh-btn:hover svg {
+                transform: rotate(180deg);
+            }
+
             h1 {
                 background: linear-gradient(
                     135deg,
@@ -42,12 +119,12 @@
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 background-clip: text;
-                text-align: center;
-                margin-bottom: 32px;
-                font-size: 2.5rem;
-                font-weight: 700;
-                line-height: 1.2;
+                margin-bottom: 12px;
+                font-size: 3rem;
+                font-weight: 800;
+                line-height: 1.1;
                 animation: gradientShift 3s ease-in-out infinite;
+                letter-spacing: -0.02em;
             }
 
             h1 br {
@@ -65,11 +142,11 @@
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 background-clip: text;
-                text-align: center;
-                font-size: 1.1rem;
+                font-size: 1.2rem;
                 margin-bottom: 32px;
-                font-weight: 400;
+                font-weight: 500;
                 animation: subtitleGlow 4s ease-in-out infinite;
+                opacity: 0.9;
             }
 
             @keyframes gradientShift {
@@ -177,13 +254,20 @@
 
             .news-source {
                 display: inline-block;
-                background: #f3f4f6;
-                color: #374151;
                 padding: 4px 8px;
                 border-radius: 6px;
                 font-size: 0.75rem;
                 font-weight: 500;
                 margin-left: auto;
+            }
+
+            .news-source.bbc한국어 {
+                background: #000000;
+                color: white;
+            }
+            .news-source.연합뉴스 {
+                background: #1e40af;
+                color: white;
             }
 
             .news-image {
@@ -194,10 +278,16 @@
                 margin-bottom: 16px;
                 background: #f9fafb;
                 transition: transform 0.3s ease;
+                display: block;
+                cursor: pointer;
             }
 
             .news-item:hover .news-image {
                 transform: scale(1.02);
+            }
+
+            .news-image:hover {
+                transform: scale(1.05);
             }
 
             .news-item.no-image .news-title {
@@ -223,30 +313,6 @@
 
             .error a:hover {
                 color: #b91c1c;
-            }
-
-            .refresh-btn {
-                background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-                color: white;
-                border: none;
-                padding: 14px 28px;
-                border-radius: 12px;
-                cursor: pointer;
-                font-size: 1rem;
-                font-weight: 600;
-                margin: 0 auto 32px;
-                display: block;
-                transition: all 0.3s ease;
-                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-            }
-
-            .refresh-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
-            }
-
-            .refresh-btn:active {
-                transform: translateY(0);
             }
 
             .stats {
@@ -339,11 +405,23 @@
     </head>
     <body>
         <div class="container">
-            <h1>최신 뉴스를 한눈에 확인하세요</h1>
-
-            <button class="refresh-btn" onclick="loadNews()">
-                🔄 새로고침
-            </button>
+            <div class="header-section">
+                <div class="title-card">
+                    <h1>오늘의 이슈</h1>
+                    <div class="subtitle">가장 핫한 뉴스를 한눈에</div>
+                    <button
+                        class="title-refresh-btn"
+                        onclick="loadNews()"
+                        title="새로고침"
+                    >
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
+                            />
+                        </svg>
+                    </button>
+                </div>
+            </div>
 
             <div id="news-container">
                 <div class="loading">뉴스를 불러오는 중...</div>
@@ -355,17 +433,12 @@
         </div>
 
         <script>
-            // RSS 피드 URL들 (더 안정적인 피드들로 변경)
+            // RSS 피드 URL들 (간단하고 안정적인 피드들)
             const RSS_FEEDS = [
                 {
-                    name: "네이버 뉴스",
-                    url: "https://api.rss2json.com/v1/api.json?rss_url=https://news.naver.com/rss/main",
-                    fallback: "https://news.naver.com/",
-                },
-                {
-                    name: "다음 뉴스",
-                    url: "https://api.rss2json.com/v1/api.json?rss_url=https://news.daum.net/rss",
-                    fallback: "https://news.daum.net/",
+                    name: "BBC 한국어",
+                    url: "https://api.rss2json.com/v1/api.json?rss_url=https://feeds.bbci.co.uk/korean/rss.xml",
+                    fallback: "https://www.bbc.com/korean",
                 },
                 {
                     name: "연합뉴스",
@@ -396,13 +469,20 @@
                             if (data.status === "ok" && data.items) {
                                 // 각 기사에 소스 정보 추가
                                 const newsWithSource = data.items
-                                    .slice(0, 5)
+                                    .slice(0, 8) // 각 소스당 8개씩 가져오기
                                     .map((item) => ({
                                         ...item,
                                         source: feed.name,
                                         fallback: feed.fallback,
                                     }));
                                 allNews = allNews.concat(newsWithSource);
+                                console.log(
+                                    `✅ ${feed.name}: ${data.items.length}개 뉴스 로드됨`
+                                );
+                            } else {
+                                console.log(
+                                    `❌ ${feed.name}: 데이터 로드 실패`
+                                );
                             }
                         } catch (error) {
                             console.error(`Error loading ${feed.name}:`, error);
@@ -480,8 +560,13 @@
                             : "news-item no-image";
 
                         const imageHTML = hasImage
-                            ? `<img src="${image}" alt="뉴스 이미지" class="news-image" onerror="this.style.display='none'">`
+                            ? `<a href="${item.link}" target="_blank"><img src="${image}" alt="뉴스 이미지" class="news-image" onerror="this.style.display='none'"></a>`
                             : "";
+
+                        // 뉴스 소스별 CSS 클래스 매핑
+                        const sourceClass = item.source
+                            .toLowerCase()
+                            .replace(/\s+/g, "");
 
                         return `
                             <div class="${cardClass}">
@@ -491,7 +576,7 @@
                                 </div>
                                 <div class="news-date">
                                     ${date}
-                                    <span class="news-source">${item.source}</span>
+                                    <span class="news-source ${sourceClass}">${item.source}</span>
                                 </div>
                             </div>
                         `;
