@@ -269,14 +269,15 @@
                 font-size: 0.75rem;
                 font-weight: 500;
                 margin-left: auto;
+                white-space: nowrap;
             }
 
-            .news-source.bbc한국어 {
-                background: #000000;
-                color: white;
-            }
             .news-source.연합뉴스 {
                 background: #1e40af;
+                color: white;
+            }
+            .news-source.bbc코리아 {
+                background: #000000;
                 color: white;
             }
 
@@ -348,6 +349,10 @@
 
                 .title-card h1 {
                     font-size: 2.2rem;
+                }
+                .news-source {
+                    font-size: 0.7rem;
+                    padding: 3px 6px;
                 }
             }
 
@@ -508,7 +513,7 @@
             // RSS 피드 URL들 (간단하고 안정적인 피드들)
             const RSS_FEEDS = [
                 {
-                    name: "BBC 한국어",
+                    name: "BBC 코리아",
                     url: "https://api.rss2json.com/v1/api.json?rss_url=https://feeds.bbci.co.uk/korean/rss.xml",
                     fallback: "https://www.bbc.com/korean",
                 },
@@ -601,11 +606,17 @@
                         const date = new Date(item.pubDate).toLocaleDateString(
                             "ko-KR",
                             {
-                                year: "numeric",
                                 month: "long",
                                 day: "numeric",
+                                weekday: "long",
+                            }
+                        );
+                        const time = new Date(item.pubDate).toLocaleTimeString(
+                            "ko-KR",
+                            {
                                 hour: "2-digit",
                                 minute: "2-digit",
+                                hour12: false,
                             }
                         );
 
@@ -637,18 +648,24 @@
 
                         // 뉴스 소스별 CSS 클래스 매핑
                         const sourceClass = item.source
-                            .toLowerCase()
-                            .replace(/\s+/g, "");
+                            .replace(/\s+/g, "")
+                            .replace("한국어", "코리아")
+                            .toLowerCase();
 
                         return `
                             <div class="${cardClass}">
                                 ${imageHTML}
                                 <div class="news-title">
-                                    <a href="${item.link}" target="_blank">${item.title}</a>
+                                    <a href="${item.link}" target="_blank">${
+                            item.title
+                        }</a>
                                 </div>
                                 <div class="news-date">
-                                    ${date}
-                                    <span class="news-source ${sourceClass}">${item.source}</span>
+                                    <span class="news-date-text">${date} ${time}</span>
+                                    <span class="news-source ${sourceClass}">${item.source.replace(
+                            "BBC 한국어",
+                            "BBC 코리아"
+                        )}</span>
                                 </div>
                             </div>
                         `;
