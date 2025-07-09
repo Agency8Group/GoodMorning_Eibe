@@ -31,75 +31,83 @@
 
             .header-section {
                 text-align: center;
-                margin-bottom: 40px;
-                padding: 20px 0;
+                margin-bottom: 24px;
+                padding: 10px 0;
             }
 
             .title-card {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                border-radius: 20px;
-                padding: 40px 60px;
                 position: relative;
-                box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 24px 0;
+                border-bottom: 4px solid #000000;
+                margin-bottom: 32px;
+            }
+
+            .title-content {
+                text-align: left;
+                max-width: 1200px;
+                margin: 0;
+                padding: 0 20px;
             }
 
             .title-card h1 {
-                background: none;
-                -webkit-background-clip: unset;
-                -webkit-text-fill-color: unset;
-                background-clip: unset;
-                color: white;
-                margin-bottom: 12px;
-                font-size: 3rem;
-                font-weight: 800;
-                line-height: 1.1;
-                animation: none;
-                letter-spacing: -0.02em;
+                color: #000000;
+                margin-bottom: 8px;
+                font-size: 3.5rem;
+                font-weight: 900;
+                line-height: 1;
+                letter-spacing: -0.03em;
+                font-family: "Times New Roman", serif;
+                text-transform: uppercase;
+                text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
             }
 
             .title-card .subtitle {
-                background: none;
-                -webkit-background-clip: unset;
-                -webkit-text-fill-color: unset;
-                background-clip: unset;
-                color: rgba(255, 255, 255, 0.9);
-                font-size: 1.2rem;
-                margin-bottom: 0;
+                color: #374151;
+                font-size: 1.1rem;
+                margin-bottom: 16px;
                 font-weight: 500;
-                animation: none;
-                opacity: 1;
+                font-style: italic;
+                letter-spacing: 0.5px;
+            }
+
+            .date-line {
+                font-size: 0.9rem;
+                color: #4b5563;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            .current-date {
+                font-family: "Courier New", monospace;
             }
 
             .title-refresh-btn {
                 position: absolute;
-                top: 20px;
-                right: 20px;
-                width: 48px;
-                height: 48px;
+                top: 24px;
+                right: 40px;
+                width: 40px;
+                height: 40px;
                 border: none;
-                background: rgba(255, 255, 255, 0.2);
-                border-radius: 50%;
+                background: #000000;
+                border-radius: 2px;
                 cursor: pointer;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                transition: all 0.3s ease;
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.3);
+                transition: all 0.2s ease;
             }
 
             .title-refresh-btn:hover {
-                background: rgba(255, 255, 255, 0.3);
-                transform: scale(1.1);
-                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+                background: #1f1f1f;
+                transform: scale(1.05);
             }
 
             .title-refresh-btn svg {
-                width: 20px;
-                height: 20px;
+                width: 18px;
+                height: 18px;
                 fill: white;
-                transition: transform 0.3s ease;
+                transition: transform 0.2s ease;
             }
 
             .title-refresh-btn:hover svg {
@@ -183,9 +191,9 @@
 
             .news-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                grid-template-columns: repeat(3, 1fr);
                 gap: 24px;
-                margin-top: 32px;
+                margin-top: 16px;
             }
 
             .news-item {
@@ -325,6 +333,22 @@
                 border-radius: 8px;
             }
 
+            /* 태블릿 반응형 */
+            @media (max-width: 1024px) and (min-width: 769px) {
+                .news-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 20px;
+                }
+
+                .title-card {
+                    padding: 16px 30px;
+                }
+
+                .title-card h1 {
+                    font-size: 2.2rem;
+                }
+            }
+
             /* 모바일 반응형 */
             @media (max-width: 768px) {
                 body {
@@ -336,38 +360,48 @@
                     border-radius: 16px;
                 }
 
-                h1 {
-                    font-size: 2rem;
+                .header-section {
                     margin-bottom: 16px;
+                    padding: 8px 0;
                 }
 
-                h1 br {
-                    display: block;
+                .title-card {
+                    padding: 16px 24px;
                 }
 
-                .subtitle {
+                .title-card h1 {
+                    font-size: 2rem;
+                    margin-bottom: 6px;
+                }
+
+                .title-card .subtitle {
                     font-size: 1rem;
-                    margin-bottom: 24px;
+                }
+
+                .title-refresh-btn {
+                    width: 40px;
+                    height: 40px;
+                    top: 8px;
+                    right: 8px;
+                }
+
+                .title-refresh-btn svg {
+                    width: 16px;
+                    height: 16px;
                 }
 
                 .news-grid {
                     grid-template-columns: 1fr;
                     gap: 16px;
-                    margin-top: 24px;
+                    margin-top: 12px;
                 }
 
                 .news-item {
-                    padding: 20px;
+                    padding: 16px;
                 }
 
                 .news-image {
                     height: 160px;
-                }
-
-                .refresh-btn {
-                    padding: 12px 24px;
-                    font-size: 0.95rem;
-                    margin-bottom: 24px;
                 }
 
                 .loading {
@@ -382,19 +416,50 @@
                 }
 
                 .container {
-                    padding: 16px;
+                    padding: 12px;
                 }
 
-                h1 {
-                    font-size: 1.75rem;
+                .header-section {
+                    margin-bottom: 12px;
+                    padding: 6px 0;
+                }
+
+                .title-card {
+                    padding: 12px 16px;
+                }
+
+                .title-card h1 {
+                    font-size: 1.8rem;
+                    margin-bottom: 4px;
+                }
+
+                .title-card .subtitle {
+                    font-size: 0.9rem;
+                }
+
+                .title-refresh-btn {
+                    width: 36px;
+                    height: 36px;
+                    top: 6px;
+                    right: 6px;
+                }
+
+                .title-refresh-btn svg {
+                    width: 14px;
+                    height: 14px;
+                }
+
+                .news-grid {
+                    gap: 12px;
+                    margin-top: 8px;
                 }
 
                 .news-item {
-                    padding: 16px;
+                    padding: 12px;
                 }
 
                 .news-title {
-                    font-size: 1rem;
+                    font-size: 0.95rem;
                 }
 
                 .news-image {
@@ -407,8 +472,13 @@
         <div class="container">
             <div class="header-section">
                 <div class="title-card">
-                    <h1>오늘의 이슈</h1>
-                    <div class="subtitle">가장 핫한 뉴스를 한눈에</div>
+                    <div class="title-content">
+                        <h1>오늘의 이슈</h1>
+                        <div class="subtitle">가장 핫한 뉴스를 한눈에</div>
+                        <div class="date-line">
+                            <span class="current-date"></span>
+                        </div>
+                    </div>
                     <button
                         class="title-refresh-btn"
                         onclick="loadNews()"
@@ -594,8 +664,25 @@
                 stats.style.display = "block";
             }
 
-            // 페이지 로드 시 뉴스 로딩
-            window.onload = loadNews;
+            // 현재 날짜 표시
+            function updateDate() {
+                const now = new Date();
+                const options = {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    weekday: "long",
+                };
+                const dateString = now.toLocaleDateString("ko-KR", options);
+                document.querySelector(".current-date").textContent =
+                    dateString;
+            }
+
+            // 페이지 로드 시 뉴스 로딩 및 날짜 업데이트
+            window.onload = function () {
+                updateDate();
+                loadNews();
+            };
         </script>
     </body>
 </html>
